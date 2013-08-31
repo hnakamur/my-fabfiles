@@ -3,20 +3,22 @@ from fabric.context_managers import settings
 
 def status(name):
     with settings(ok_ret_codes=[0,3]):
-        out = sudo('/sbin/service %s status' % name)
+        # Note: We need to set pty=False.
+        # See http://docs.fabfile.org/en/1.7/faq.html#init-scripts-don-t-work
+        out = sudo('/sbin/service %s status' % name, pty=False)
     return 'running' if out.return_code == 0 else 'stopped'
 
 def start(name):
-    sudo('/sbin/service %s start' % name)
+    sudo('/sbin/service %s start' % name, pty=False)
 
 def stop(name):
-    sudo('/sbin/service %s stop' % name)
+    sudo('/sbin/service %s stop' % name, pty=False)
 
 def reload(name):
-    sudo('/sbin/service %s reload' % name)
+    sudo('/sbin/service %s reload' % name, pty=False)
 
 def restart(name):
-    sudo('/sbin/service %s restart' % name)
+    sudo('/sbin/service %s restart' % name, pty=False)
 
 def ensure_started(name):
     if status(name) != 'running':
