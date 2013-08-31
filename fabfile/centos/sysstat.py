@@ -11,7 +11,7 @@ def ensure_package_installed():
     rpm.ensure_installed('sysstat')
 
 def ensure_config_file():
-    template.template(
+    template.ensure_template(
         'sysstat.cron.j2',
         '/etc/cron.d/sysstat',
         template_dir='fabfile/centos/templates/sysstat',
