@@ -1,4 +1,5 @@
 from fabric.contrib import files
+from fabfile.common.lib.file import calc_sha256sum
 from fabfile.common.lib.operations import run_or_sudo
 
 def ensure_downloaded(url, dest, sha256sum=None, use_sudo=False):
@@ -9,13 +10,6 @@ def ensure_downloaded(url, dest, sha256sum=None, use_sudo=False):
         if sha256sum == result:
             return
     download(url, dest, use_sudo)
-
-def calc_sha256sum(path, use_sudo=False):
-    if not files.exists(path, use_sudo):
-        return None
-    run_fn = run_or_sudo(use_sudo)
-    output = run_fn("sha256sum %s | awk '{printf(\"%%s\", $1)}'" % path)
-    return output.stdout
 
 def download(url, dest, use_sudo=False):
     run_fn = run_or_sudo(use_sudo)
